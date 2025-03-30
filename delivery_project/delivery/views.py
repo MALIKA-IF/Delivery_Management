@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import login,logout,authenticate
+from .forms import orderform,statusform
+from .models import Order,Statues
 
 # Create your views here.
 
@@ -15,5 +17,19 @@ def Login_user(request):
 
 def Logout_user(request):
     logout(request)
-    #redirect to login page
-    
+    return render(request,"login.html")
+
+def register_order(request):
+
+    context={}
+
+    form = orderform(request.POST)
+    if form.is_valid():
+        form.save()
+
+    context['form']= form   
+    return render(request,'RegisterOrder.html',context)
+
+
+def register_statues():
+    pass    
