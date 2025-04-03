@@ -11,6 +11,9 @@ class Order(models.Model):
     nature_of_package=models.CharField(max_length=100)
     number_phone_customer=models.IntegerField()
 
+    def __str__(self):
+        return self.name_customer
+
 class Statues(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     order=models.ForeignKey(Order,on_delete=models.CASCADE)
@@ -23,3 +26,5 @@ class Statues(models.Model):
         (STATUS_Completed, 'completed'),]
     statue = models.IntegerField(choices=STATUS_CHOICES)
                              
+    def __str__(self):
+        return self.statue                         

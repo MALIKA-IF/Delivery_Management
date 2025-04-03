@@ -19,6 +19,8 @@ def Logout_user(request):
     logout(request)
     return render(request,"login.html")
 
+
+#function to register orders by customers
 def register_order(request):
 
     context={}
@@ -28,8 +30,29 @@ def register_order(request):
         form.save()
 
     context['form']= form   
-    return render(request,'RegisterOrder.html',context)
+    return render(request,'delivery/RegisterOrder.html',context)
 
+#function to update statues by drivers
+def update_statues(request):
 
-def register_statues():
+    from1 =statusform(request.POST)
+    
     pass    
+#function ti retrieve all customers orders
+def list_orders(request):
+
+    context={}
+
+    context['dataset']=Order.objects.all()
+
+    return render(request,'delivery/list_orders.html',context)
+
+#function to retrieve all orders statues
+def list_statues(request):
+
+    context={}
+
+    context['dataset']=Statues.objects.all()
+
+    return render(request,'delivery/list_statues.html',context)
+
