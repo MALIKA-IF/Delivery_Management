@@ -17,14 +17,11 @@ class Order(models.Model):
 class Statues(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     order=models.ForeignKey(Order,on_delete=models.CASCADE)
-    STATUS_Processing = ""
-    STATUS_Out = ""
-    STATUS_Completed= ""
+    
+ 
     STATUS_CHOICES = [
-        (STATUS_Processing, 'processing'),
-        (STATUS_Out, 'out for delivery'),
-        (STATUS_Completed, 'completed'),]
+        (1, 'processing'),
+        (2, 'out for delivery'),
+        (3, 'completed'),]
     statue = models.IntegerField(choices=STATUS_CHOICES)
                              
-    def __str__(self):
-        return self.statue                         

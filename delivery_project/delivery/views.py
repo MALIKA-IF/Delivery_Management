@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login,logout,authenticate
 from .forms import orderform,statusform
 from .models import Order,Statues
@@ -32,13 +32,31 @@ def register_order(request):
     context['form']= form   
     return render(request,'delivery/RegisterOrder.html',context)
 
-#function to update statues by drivers
-def update_statues(request):
+def register_statues(request):
 
-    from1 =statusform(request.POST)
-    
-    pass    
-#function ti retrieve all customers orders
+    context={}
+
+    form = statusform(request.POST)
+    if form.is_valid():
+        form.save()
+
+    context['form']= form   
+    return render(request,'delivery/RegisterStatues.html',context)
+
+#function to update statues by drivers
+def update_statues(request, id):
+
+    context={}
+    stat=get_object_or_404(Statues,id=id)
+
+    form =statusform(request.POST, instance=stat)
+    if form.is_valid():
+        form.save()
+    context["form"]=form
+
+    return render(request,'delivery/update_statues.html', context)
+        
+#function to retrieve all customers orders
 def list_orders(request):
 
     context={}
@@ -46,6 +64,15 @@ def list_orders(request):
     context['dataset']=Order.objects.all()
 
     return render(request,'delivery/list_orders.html',context)
+
+#function to retrieve all customers orders by driver id
+#def list_orders(request,id):
+
+ #   context={}
+
+#    context['dataset']=Order.objects.all()
+
+#    return render(request,'delivery/list_orders.html',context)
 
 #function to retrieve all orders statues
 def list_statues(request):
