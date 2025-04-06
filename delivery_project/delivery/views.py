@@ -1,23 +1,46 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth import login,logout,authenticate
-from .forms import orderform,statusform
+from .forms import orderform,statusform,loginform,registrationform
 from .models import Order,Statues
+from django.contrib import messages
+from rest_framework.decorators import api_view
+from .serializers import loginSerializer,RegisterSerializer
+from rest_framework.authtoken.models import Token
+from rest_framework import response
 
 # Create your views here.
+@api_view(['POST'])
+def userRegister(requset):
+    if requset.method =="POST":
+        serializer =RegisterSerializer(data=requset.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response({"message":"sign up succefully"})  
+        return response(serializer.errors)               
+
+    pass
 
 
+@api_view(['POST'])
 def Login_user(request):
-    email = request.POST['email']
-    password =request.POST['password']
-    user=authenticate(request, email=email, password=password)
+    if request.method == "POST":
+       serializer = loginSerializer(data=request.data)
+       if serializer.is_valid():
+          user=authenticate(username=serializer.validated_data['username'],password=serializer.validated_data['password'])
     if user is not None:
-        login(request,user)
-        #redirect to the session
+        token, created=token.object.create(user=user)
+        return response({'token',token.key})
+    return response(serializer.errors)
+        
     
-
+    
+    
+@api_view(['POST'])
 def Logout_user(request):
-    logout(request)
-    return render(request,"login.html")
+   if request.method=='POST':
+       request.user.auth_token.delete()
+       return response({"message":"you logged out"})
+   
 
 
 #function to register orders by customers
